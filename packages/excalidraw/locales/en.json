@@ -767,7 +767,8 @@
     "switchPrevPage": "Previous page",
     "switchNextPage": "Next page",
     "exportDocument": "Export document (all pages)",
-    "importDocument": "Open multi-page document"
+    "importDocument": "Open multi-page document",
+    "renameDocument": "Rename document"
   },
   "github": {
     "dialogTitle": "GitHub cloud sync",

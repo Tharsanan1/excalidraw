@@ -5,6 +5,7 @@ import {
   downloadIcon,
   file,
   GithubIcon,
+  pencilIcon as editIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { useI18n } from "@excalidraw/excalidraw/i18n";
 import { MainMenu } from "@excalidraw/excalidraw/index";
@@ -103,6 +104,25 @@ export const AppMainMenu: React.FC<{
           isCollaborating={props.isCollaborating}
           onSelect={() => props.onCollabDialogOpen()}
         />
+      )}
+      {props.excalidrawAPI && (
+        <MainMenu.Item
+          icon={editIcon}
+          onSelect={() => {
+            const currentName = props.excalidrawAPI.getName();
+            const newName = window.prompt(
+              t("pages.renameDocument"),
+              currentName,
+            );
+            if (newName && newName.trim()) {
+              props.excalidrawAPI.updateScene({
+                appState: { name: newName.trim() },
+              });
+            }
+          }}
+        >
+          {t("pages.renameDocument")}
+        </MainMenu.Item>
       )}
       {!ghReady && (
         <MainMenu.Item
