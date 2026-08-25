@@ -2,6 +2,8 @@ import {
   loginIcon,
   ExcalLogo,
   eyeIcon,
+  downloadIcon,
+  file,
 } from "@excalidraw/excalidraw/components/icons";
 import { useI18n } from "@excalidraw/excalidraw/i18n";
 import { MainMenu } from "@excalidraw/excalidraw/index";
@@ -13,6 +15,10 @@ import type { Theme } from "@excalidraw/element/types";
 
 import { LanguageList } from "../app-language/LanguageList";
 import { isExcalidrawPlusSignedUser } from "../app_constants";
+import {
+  downloadMultiPageDocument,
+  openMultiPageDocumentPicker,
+} from "../data/multipageDocument";
 
 import { saveDebugState } from "./DebugCanvas";
 
@@ -22,6 +28,7 @@ export const AppMainMenu: React.FC<{
   isCollabEnabled: boolean;
   theme: Theme | "system";
   refresh: () => void;
+  excalidrawAPI?: any;
 }> = React.memo((props) => {
   const { t } = useI18n();
   return (
@@ -30,6 +37,26 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.SaveToActiveFile />
       <MainMenu.DefaultItems.Export />
       <MainMenu.DefaultItems.SaveAsImage />
+      {props.excalidrawAPI && !props.isCollaborating && (
+        <>
+          <MainMenu.Item
+            icon={downloadIcon}
+            onSelect={() =>
+              downloadMultiPageDocument(props.excalidrawAPI)
+            }
+          >
+            {t("pages.exportDocument")}
+          </MainMenu.Item>
+          <MainMenu.Item
+            icon={file}
+            onSelect={() =>
+              openMultiPageDocumentPicker(props.excalidrawAPI)
+            }
+          >
+            {t("pages.importDocument")}
+          </MainMenu.Item>
+        </>
+      )}
       {props.isCollabEnabled && (
         <MainMenu.DefaultItems.LiveCollaborationTrigger
           isCollaborating={props.isCollaborating}

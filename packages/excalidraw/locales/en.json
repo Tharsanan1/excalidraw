@@ -268,6 +268,8 @@
     "couldNotCreateShareableLink": "Couldn't create shareable link.",
     "couldNotCreateShareableLinkTooBig": "Couldn't create shareable link: the scene is too big",
     "couldNotLoadInvalidFile": "Couldn't load invalid file",
+    "notAMultipageDocument": "This file doesn't contain multi-page document data.",
+    "multipageImportFailed": "Failed to load the multi-page document.",
     "importBackendFailed": "Importing from backend failed.",
     "cannotExportEmptyCanvas": "Cannot export empty canvas.",
     "couldNotCopyToClipboard": "Couldn't copy to clipboard.",
@@ -752,5 +754,19 @@
     "spacebar": "Space",
     "delete": "Delete",
     "mmb": "Scroll wheel"
+  },
+  "pages": {
+    "addPage": "Add page",
+    "rename": "Rename",
+    "duplicate": "Duplicate",
+    "delete": "Delete page",
+    "moveLeft": "Move left",
+    "moveRight": "Move right",
+    "pageLabel": "Page: {{name}}",
+    "confirmDelete": "Delete page \"{{name}}\"? This cannot be undone.",
+    "switchPrevPage": "Previous page",
+    "switchNextPage": "Next page",
+    "exportDocument": "Export document (all pages)",
+    "importDocument": "Open multi-page document"
   }
 }

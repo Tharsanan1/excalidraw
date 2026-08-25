@@ -107,6 +107,8 @@ import {
   exportToExcalidrawPlus,
 } from "./components/ExportToExcalidrawPlus";
 import { TopErrorBoundary } from "./components/TopErrorBoundary";
+import { PageSwitcher } from "./components/PageSwitcher";
+import * as pageManager from "./data/pageManager";
 
 import {
   exportToBackend,
@@ -690,6 +692,7 @@ const ExcalidrawWrapper = () => {
   useEffect(() => {
     const unloadHandler = (event: BeforeUnloadEvent) => {
       LocalData.flushSave();
+      pageManager.flushPendingWrites();
 
       if (
         excalidrawAPI &&
@@ -719,6 +722,9 @@ const ExcalidrawWrapper = () => {
   ) => {
     if (collabAPI?.isCollaborating()) {
       collabAPI.syncElements(elements);
+    } else {
+      // keep multi-page metadata (viewport/updatedAt) fresh for the active page
+      pageManager.recordActivePageChange(appState);
     }
 
     // this check is redundant, but since this is a hot path, it's best
@@ -1032,6 +1038,7 @@ const ExcalidrawWrapper = () => {
           isCollaborating={isCollaborating}
           isCollabEnabled={!isCollabDisabled}
           theme={appTheme}
+          excalidrawAPI={excalidrawAPI}
           refresh={() => forceRefresh((prev) => !prev)}
         />
         <AppWelcomeScreen
@@ -1059,6 +1066,9 @@ const ExcalidrawWrapper = () => {
           )}
         </OverwriteConfirmDialog>
         <AppFooter onChange={() => excalidrawAPI?.refresh()} />
+        {excalidrawAPI && !isCollaborating && !isCollabDisabled && (
+          <PageSwitcher excalidrawAPI={excalidrawAPI} />
+        )}
         {excalidrawAPI && <AIComponents excalidrawAPI={excalidrawAPI} />}
 
         <TTDDialogTrigger />
