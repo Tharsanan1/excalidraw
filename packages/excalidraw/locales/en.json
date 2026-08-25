@@ -768,5 +768,25 @@
     "switchNextPage": "Next page",
     "exportDocument": "Export document (all pages)",
     "importDocument": "Open multi-page document"
+  },
+  "github": {
+    "dialogTitle": "GitHub cloud sync",
+    "signIn": "Sign in with GitHub",
+    "signOut": "Sign out",
+    "connected": "Connected to GitHub",
+    "signInHint": "Paste a GitHub Personal Access Token. Your documents are stored as files in a private repository (excalidraw-docs) in your own account.",
+    "createToken": "Create a token (opens github.com)",
+    "tokenPlaceholder": "ghp_... or fine-grained token",
+    "connecting": "Connecting...",
+    "loading": "Loading documents...",
+    "noDocuments": "No documents in the cloud yet.",
+    "notConnected": "Not connected to GitHub.",
+    "saveDocument": "Save document to GitHub",
+    "openDocuments": "Open from GitHub...",
+    "saving": "Saving to GitHub...",
+    "savedToCloud": "Saved to GitHub.",
+    "conflictNotice": "The cloud copy changed elsewhere. Your version was saved alongside it as a conflict copy.",
+    "saveFailed": "Saving to GitHub failed.",
+    "loadFailed": "Failed to load the document from GitHub."
   }
 }

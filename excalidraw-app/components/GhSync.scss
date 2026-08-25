@@ -1,0 +1,129 @@
+.excalidraw {
+  .gh-sync-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .gh-sync-dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(420px, calc(100vw - 32px));
+    max-height: min(520px, calc(100vh - 64px));
+    border-radius: 12px;
+    background-color: var(--island-bg-color);
+    box-shadow: var(--shadow-island);
+    overflow: hidden;
+  }
+
+  .gh-sync-dialog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    border-bottom: 1px solid var(--button-gray-3);
+  }
+
+  .gh-sync-dialog__close {
+    border: none;
+    background: transparent;
+    color: var(--text-primary-color);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: var(--button-gray-2);
+    }
+  }
+
+  .gh-sync-signin,
+  .gh-sync-doclist {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+
+  .gh-sync-signin__hint {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-primary-color);
+    opacity: 0.8;
+  }
+
+  .gh-sync-signin__link {
+    font-size: 13px;
+    color: var(--color-primary);
+  }
+
+  .gh-sync-signin__input {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border-color);
+    background-color: var(--button-gray-1);
+    color: var(--text-primary-color);
+    font-size: 13px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+  }
+
+  .gh-sync-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+
+    &--primary {
+      background-color: var(--color-primary);
+      color: #fff;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+    }
+  }
+
+  .gh-sync-error {
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-danger);
+  }
+
+  .gh-sync-muted {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-primary-color);
+    opacity: 0.7;
+  }
+
+  .gh-sync-doclist__item {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--button-gray-3);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary-color);
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--button-gray-2);
+    }
+  }
+}

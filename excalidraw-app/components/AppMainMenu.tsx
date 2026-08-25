@@ -4,6 +4,7 @@ import {
   eyeIcon,
   downloadIcon,
   file,
+  GithubIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { useI18n } from "@excalidraw/excalidraw/i18n";
 import { MainMenu } from "@excalidraw/excalidraw/index";
@@ -17,8 +18,16 @@ import { LanguageList } from "../app-language/LanguageList";
 import { isExcalidrawPlusSignedUser } from "../app_constants";
 import {
   downloadMultiPageDocument,
+  exportMultiPageDocument,
   openMultiPageDocumentPicker,
 } from "../data/multipageDocument";
+import {
+  getGhSyncSnapshot,
+  saveDocumentToCloud,
+  signOutOfGithub,
+  subscribeToGhSync,
+} from "../data/ghSync/ghStore";
+import { GhSyncDialogs } from "./GhSyncDialogs";
 
 import { saveDebugState } from "./DebugCanvas";
 
@@ -31,8 +40,40 @@ export const AppMainMenu: React.FC<{
   excalidrawAPI?: any;
 }> = React.memo((props) => {
   const { t } = useI18n();
+  const gh = React.useSyncExternalStore(subscribeToGhSync, getGhSyncSnapshot);
+  const [ghDialog, setGhDialog] = React.useState<
+    "closed" | "signIn" | "open"
+  >("closed");
+  const [ghBusy, setGhBusy] = React.useState(false);
+
+  const ghReady = gh.status === "ready" && !!props.excalidrawAPI;
+
+  const handleSaveToGithub = async () => {
+    if (!props.excalidrawAPI) {
+      return;
+    }
+    setGhBusy(true);
+    try {
+      const doc = exportMultiPageDocument(props.excalidrawAPI);
+      const result = await saveDocumentToCloud(
+        props.excalidrawAPI.getName() || "Untitled",
+        JSON.stringify(doc),
+      );
+      alert(
+        result.conflict
+          ? `${t("github.conflictNotice")}\n${result.path}`
+          : t("github.savedToCloud"),
+      );
+    } catch (error) {
+      console.error(error);
+      alert(t("github.saveFailed"));
+    }
+    setGhBusy(false);
+  };
+
   return (
-    <MainMenu>
+    <>
+      <MainMenu>
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />
       <MainMenu.DefaultItems.Export />
@@ -62,6 +103,34 @@ export const AppMainMenu: React.FC<{
           isCollaborating={props.isCollaborating}
           onSelect={() => props.onCollabDialogOpen()}
         />
+      )}
+      {!ghReady && (
+        <MainMenu.Item
+          icon={GithubIcon}
+          onSelect={() => setGhDialog("signIn")}
+        >
+          {t("github.signIn")}
+        </MainMenu.Item>
+      )}
+      {ghReady && (
+        <>
+          <MainMenu.Item
+            icon={GithubIcon}
+            disabled={ghBusy}
+            onSelect={handleSaveToGithub}
+          >
+            {ghBusy ? t("github.saving") : t("github.saveDocument")}
+          </MainMenu.Item>
+          <MainMenu.Item
+            icon={file}
+            onSelect={() => setGhDialog("open")}
+          >
+            {t("github.openDocuments")}
+          </MainMenu.Item>
+          <MainMenu.Item icon={loginIcon} onSelect={signOutOfGithub}>
+            {`${t("github.signOut")} (${gh.user})`}
+          </MainMenu.Item>
+        </>
       )}
       <MainMenu.DefaultItems.CommandPalette className="highlighted" />
       <MainMenu.DefaultItems.SearchMenu />
@@ -111,6 +180,14 @@ export const AppMainMenu: React.FC<{
         <LanguageList style={{ width: "100%" }} />
       </MainMenu.ItemCustom>
       <MainMenu.DefaultItems.ChangeCanvasBackground />
-    </MainMenu>
+      </MainMenu>
+      {props.excalidrawAPI && (
+        <GhSyncDialogs
+          excalidrawAPI={props.excalidrawAPI}
+          mode={ghDialog}
+          onClose={() => setGhDialog("closed")}
+        />
+      )}
+    </>
   );
 });
