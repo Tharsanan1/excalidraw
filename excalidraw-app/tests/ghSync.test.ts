@@ -9,6 +9,7 @@ import {
   toRemotePath,
 } from "../data/ghSync/ghStore";
 import { GhApiError } from "../data/ghSync/ghApi";
+import { exportMultiPageDocument } from "../data/multipageDocument";
 
 // minimal fetch mock returning JSON responses
 const jsonRes = (data: any, status = 200) =>
@@ -35,6 +36,25 @@ describe("ghSync helpers", () => {
     expect(conflictRemotePath("documents/My doc.excalidraw", date)).toBe(
       "documents/My doc (conflict 2026-08-25 1432).excalidraw",
     );
+  });
+
+  it("exports documents that pass the multi-page import validator", () => {
+    // regression: serializeAsJSON embeds type "local"; the exported document
+    // must carry type "excalidraw" or the importer rejects it
+    const fakeApi = {
+      getSceneElementsIncludingDeleted: () => [],
+      getAppState: () => ({ viewBackgroundColor: "#ffffff" }),
+      getFiles: () => ({}),
+      getName: () => "test",
+    } as any;
+    const doc = JSON.parse(
+      JSON.stringify({
+        ...exportMultiPageDocument(fakeApi),
+      }),
+    );
+    expect(doc.type).toBe("excalidraw");
+    expect(doc.pages).toBeDefined();
+    expect(doc.pages.list).toBeInstanceOf(Array);
   });
 });
 

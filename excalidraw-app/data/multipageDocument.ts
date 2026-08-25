@@ -92,6 +92,9 @@ export const exportMultiPageDocument = (
 
   const doc: MultiPageDocument = {
     ...serializedActive,
+    // serializeAsJSON embeds the passed type ("local"); the canonical
+    // document type must be "excalidraw" for the import validator
+    type: "excalidraw",
     version: 2,
     pages: {
       activePageId: activePageId!,
